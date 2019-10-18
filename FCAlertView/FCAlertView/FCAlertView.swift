@@ -23,7 +23,7 @@ public class FCAlertView: UIView {
   var alertViewContents: UIView?
   let circleLayer: CAShapeLayer = {
     let circle = CAShapeLayer()
-    circle.fillColor = UIColor.whiteColor().CGColor
+    circle.fillColor = UIColor.white.cgColor
     return circle
   }()
   
@@ -60,15 +60,15 @@ public class FCAlertView: UIView {
   
   // Color Schemes
   public var colorScheme: UIColor?
-  public var titleColor: UIColor = .blackColor()
-  public var subTitleColor: UIColor = .blackColor()
+  public var titleColor: UIColor = .black
+  public var subTitleColor: UIColor = .black
   
   
   public override init(frame: CGRect) {
     super.init(frame: frame)
     firstRun = true
     
-    backgroundColor = .clearColor()
+    backgroundColor = .clear
     
     addSubview(alertBackground)
     
@@ -78,9 +78,9 @@ public class FCAlertView: UIView {
   // Default Init
   public convenience init() {
     
-    let result = UIScreen.mainScreen().bounds.size
+    let result = UIScreen.main.bounds.size
     
-    let frame = CGRectMake(0, 0, result.width, result.height)
+    let frame = CGRect(x: 0, y: 0, width: result.width, height: result.height)
     
     self.init(frame: frame)
     
@@ -88,9 +88,9 @@ public class FCAlertView: UIView {
   
   // Initialize with a default theme
   public convenience init(type: FCAlertType){
-    let result = UIScreen.mainScreen().bounds.size
+    let result = UIScreen.main.bounds.size
     
-    let frame = CGRectMake(0, 0, result.width, result.height)
+    let frame = CGRect(x: 0, y: 0, width: result.width, height: result.height)
     self.init(frame: frame)
     
     switch type {
@@ -128,13 +128,13 @@ public class FCAlertView: UIView {
   }
   
   // MARK: Touch Events
-  override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     if let touch = touches.first {
-      let touchPoint = touch.locationInView(alertBackground)
-      let touchPoint2 = touch.locationInView(alertViewContents)
+        let touchPoint = touch.location(in: alertBackground)
+        let touchPoint2 = touch.location(in: alertViewContents)
       
-      let isPointInsideBackview = alertBackground.pointInside(touchPoint, withEvent: nil)
-      let isPointInsideAlertView = alertViewContents!.pointInside(touchPoint2, withEvent: nil)
+        let isPointInsideBackview = alertBackground.point(inside: touchPoint, with: nil)
+        let isPointInsideAlertView = alertViewContents!.point(inside: touchPoint2, with: nil)
       
       if dismissOnOutsideTouch && isPointInsideBackview && !isPointInsideAlertView {
         dismissAlertView()
@@ -144,51 +144,54 @@ public class FCAlertView: UIView {
   
   // MARK: Drawing AlertView
   private func setupAlertViewFrame() -> CGRect {
-    let result = UIScreen.mainScreen().bounds.size
+    let result = UIScreen.main.bounds.size
     var alertViewFrame: CGRect
 
-    alertBackground.frame = CGRectMake(0, 0, self.frame.width, self.frame.height)
+    alertBackground.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
     
     //  Adjusting AlertView Frames
     if alertViewWithVector == 1 {
-      alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                  self.frame.size.height/2 - (200.0/2),
-                                  result.width - defaultSpacing,
-                                  defaultHeight)
-    }else{
-      alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                  self.frame.size.height/2 - (170.0/2),
-                                  result.width - defaultSpacing,
-                                  defaultHeight - 30)
+        alertViewFrame = CGRect(x: self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y: self.frame.size.height/2 - (200.0/2),
+                                width: result.width - defaultSpacing,
+                                height: defaultHeight)
+    } else {
+        alertViewFrame = CGRect(x:self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y: self.frame.size.height/2 - (170.0/2),
+                                width:  result.width - defaultSpacing,
+                                height:  defaultHeight - 30)
     }
     
     //  Frames for when AlertView doesn't contain a title
     if title == nil {
-      alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                  self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2),
-                                  result.width - defaultSpacing,
-                                  alertViewFrame.size.height - 10)
+        alertViewFrame = CGRect(x: self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y: self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2),
+                                width:  result.width - defaultSpacing,
+                                height:  alertViewFrame.size.height - 10)
     }
     
     //  Frames for when AlertView has hidden all buttons
     if hideAllButtons {
-      alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                  self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2), result.width - defaultSpacing,
-                                  alertViewFrame.size.height - 45)
-    } else{
+        alertViewFrame = CGRect(x: self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y:  self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2),
+                                width:  result.width - defaultSpacing,
+                                height:  alertViewFrame.size.height - 45)
+    } else {
       
       // Frames for when AlertView has hidden the DONE/DISMISS button
       if hideDoneButton && numberOfButtons == 0 {
-        alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                    self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2), result.width - defaultSpacing,
-                                    alertViewFrame.size.height - 45)
+        alertViewFrame = CGRect(x: self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y:  self.frame.size.height/2 - ((alertViewFrame.size.height - 50)/2),
+                                width:  result.width - defaultSpacing,
+                                height:  alertViewFrame.size.height - 45)
       }
       
       // Frames for AlertView with 2 added buttons (vertical buttons)
       if !hideDoneButton && numberOfButtons >= 2 {
-        alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
-                                    self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + 140)/2), result.width - defaultSpacing,
-                                    alertViewFrame.size.height - 50 + 140)
+        alertViewFrame = CGRect(x: self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                y: self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + 140)/2),
+                                width:  result.width - defaultSpacing,
+                                height:  alertViewFrame.size.height - 50 + 140)
       }
     }
     return alertViewFrame
@@ -196,24 +199,20 @@ public class FCAlertView: UIView {
   
   private func renderCircleCutout(withAlertViewFrame alertViewFrame: CGRect){
     let radius = alertView!.frame.size.width
-    let rectPath = UIBezierPath(roundedRect: CGRectMake(0,
-      0,
-      frame.size.width,
-      alertView!.frame.size.height),
-                                cornerRadius: 0)
-    let circlePath = UIBezierPath(roundedRect: CGRectMake(alertViewFrame.size.width/2 - 33.75,
-      -33.75,
-      67.5,
-      67.5),
+    let rectPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.size.width, height:  alertView!.frame.size.height),cornerRadius: 0)
+    let circlePath = UIBezierPath(roundedRect: CGRect(x: alertViewFrame.size.width/2 - 33.75,
+                                                      y: -33.75,
+                                                      width: 67.5,
+                                                      height: 67.5),
                                   cornerRadius: radius)
     
-    rectPath.appendPath(circlePath)
+    rectPath.append(circlePath)
     rectPath.usesEvenOddFillRule = true
     
     let fillLayer = CAShapeLayer()
-    fillLayer.path = rectPath.CGPath
-    fillLayer.fillRule = kCAFillRuleEvenOdd
-    fillLayer.fillColor = UIColor.whiteColor().CGColor
+    fillLayer.path = rectPath.cgPath
+    fillLayer.fillRule = CAShapeLayerFillRule.evenOdd
+    fillLayer.fillColor = UIColor.white.cgColor
     fillLayer.opacity = 1
     
     alertView!.layer.addSublayer(fillLayer)
@@ -221,43 +220,43 @@ public class FCAlertView: UIView {
   
   private func renderHeader(withAlertViewFrame alertViewFrame: CGRect){
 
-    let titleLabel = UILabel(frame: CGRectMake(15.0,
-      20.0 + CGFloat(alertViewWithVector * 30),
-      alertViewFrame.size.width - 30.0,
-      20.0))
-    titleLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+    let titleLabel = UILabel(frame: CGRect(x: 15.0,
+      y: 20.0 + CGFloat(alertViewWithVector * 30),
+      width:  alertViewFrame.size.width - 30.0,
+      height:  20.0))
+    titleLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
     titleLabel.numberOfLines = 1
     titleLabel.textColor = titleColor
     titleLabel.text = title
-    titleLabel.textAlignment = .Center
+    titleLabel.textAlignment = .center
     
     let descriptionLevel = (title == nil) ? 25 : 45
     
-    let descriptionLabel = UILabel(frame: CGRectMake(25.0,
-      CGFloat(descriptionLevel + alertViewWithVector * 30),
-      alertViewFrame.size.width - 50.0,
-      60.0))
-    descriptionLabel.font = (title == nil) ? UIFont.systemFontOfSize(16, weight: UIFontWeightRegular) :
-      UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
+    let descriptionLabel = UILabel(frame: CGRect(x: 25.0,
+      y: CGFloat(descriptionLevel + alertViewWithVector * 30),
+      width: alertViewFrame.size.width - 50.0,
+      height: 60.0))
+    descriptionLabel.font = (title == nil) ? UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular) :
+        UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.light)
     
     descriptionLabel.numberOfLines = 4
     descriptionLabel.textColor = subTitleColor
     descriptionLabel.text = subTitle
-    descriptionLabel.textAlignment = .Center
+    descriptionLabel.textAlignment = .center
     descriptionLabel.adjustsFontSizeToFitWidth = true
     
     //  Separator Line - Separating Header View with Button View
-    let separatorLineView = UIView(frame: CGRectMake(0,
-      alertViewFrame.size.height - 47,
-      alertViewFrame.size.width,
-      2))
+    let separatorLineView = UIView(frame: CGRect(x: 0,
+      y: alertViewFrame.size.height - 47,
+      width: alertViewFrame.size.width,
+      height: 2))
     separatorLineView.backgroundColor = UIColor(white: 100/255, alpha: 1)
     
-    let blurEffect = UIBlurEffect(style: .ExtraLight)
+    let blurEffect = UIBlurEffect(style: .extraLight)
     
     let visualEffectView = UIVisualEffectView(effect: blurEffect)
     visualEffectView.frame = separatorLineView.bounds
-    visualEffectView.userInteractionEnabled = false
+    visualEffectView.isUserInteractionEnabled = false
     
     separatorLineView.addSubview(visualEffectView)
     
@@ -271,7 +270,7 @@ public class FCAlertView: UIView {
     }
   }
   
-  override public func drawRect(rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
     
     alpha = 0
     
@@ -279,16 +278,16 @@ public class FCAlertView: UIView {
     
     //  Setting up contents of AlertView
     alertViewContents = UIView(frame: alertViewFrame)
-    alertViewContents!.backgroundColor = .clearColor()
+    alertViewContents!.backgroundColor = .clear
     addSubview(alertViewContents!)
     
-    alertView = UIView(frame: CGRectMake(0, 0, alertViewFrame.size.width, alertViewFrame.size.height))
+    alertView = UIView(frame: CGRect(x: 0, y: 0, width: alertViewFrame.size.width, height:  alertViewFrame.size.height))
     
     //  Setting Background Color of AlertView
     if alertViewWithVector == 1 {
-      alertView!.backgroundColor = .clearColor()
+      alertView!.backgroundColor = .clear
     }else{
-      alertView!.backgroundColor = .whiteColor()
+      alertView!.backgroundColor = .white
     }
     
     alertViewContents!.addSubview(alertView!)
@@ -307,34 +306,33 @@ public class FCAlertView: UIView {
     
     // View only contains DONE/DISMISS Button
     if(!hideAllButtons && !hideDoneButton && numberOfButtons == 0) {
-      let doneButton = UIButton(type: .System)
+        let doneButton = UIButton(type: .system)
       if let colorScheme = self.colorScheme {
         doneButton.backgroundColor = colorScheme
-        doneButton.tintColor = .whiteColor()
-      }else{
-        doneButton.backgroundColor = .whiteColor()
+        doneButton.tintColor = .white
+      } else {
+        doneButton.backgroundColor = .white
       }
       
-      doneButton.frame = CGRectMake(0,
-                                    alertViewFrame.size.height - 45,
-                                    alertViewFrame.size.width,
-                                    45)
-      doneButton.setTitle(doneTitle, forState: .Normal)
-      doneButton.addTarget(self, action: #selector(donePressed(_:)), forControlEvents: .TouchUpInside)
-      doneButton.titleLabel!.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+      doneButton.frame = CGRect(x: 0,
+                                  y: alertViewFrame.size.height - 45,
+                                  width:  alertViewFrame.size.width,
+                                  height:  45)
+      doneButton.setTitle(doneTitle, for: .normal)
+        doneButton.addTarget(self, action: #selector(donePressed(sender:)), for: .touchUpInside)
+        doneButton.titleLabel!.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
       
       
       alertView!.addSubview(doneButton)
-    }
-    else if !hideAllButtons && numberOfButtons == 1 { // View also contains OTHER (One) Button
+    } else if !hideAllButtons && numberOfButtons == 1 { // View also contains OTHER (One) Button
       
       // Render user button
-      let otherButton = UIButton(type: .System)
-      otherButton.backgroundColor = .whiteColor()
+        let otherButton = UIButton(type: .system)
+      otherButton.backgroundColor = .white
       
-      otherButton.setTitle(buttonTitles![0], forState: .Normal)
-      otherButton.addTarget(self, action: #selector(handleButton(_:)), forControlEvents: .TouchUpInside)
-      otherButton.titleLabel?.font = UIFont.systemFontOfSize(16, weight: UIFontWeightRegular)
+      otherButton.setTitle(buttonTitles![0], for: .normal)
+      otherButton.addTarget(self, action: #selector(handleButton(sender:)), for: .touchUpInside)
+      otherButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
       otherButton.tintColor = colorScheme
       otherButton.titleLabel?.adjustsFontSizeToFitWidth = true
       otherButton.titleLabel?.minimumScaleFactor = 0.8
@@ -342,145 +340,145 @@ public class FCAlertView: UIView {
       
       if !hideDoneButton {
         
-        otherButton.frame = CGRectMake(0,
-                                       alertViewFrame.size.height - 45,
-                                       alertViewFrame.size.width/2,
-                                       45)
+      otherButton.frame = CGRect(x: 0,
+                                   y: alertViewFrame.size.height - 45,
+                                   width:   alertViewFrame.size.width/2,
+                                   height:  45)
         
         //Render Done buttons
-        let doneButton = UIButton(type: .System)
+        let doneButton = UIButton(type: .system)
         
         if let colorScheme = self.colorScheme {
           doneButton.backgroundColor = colorScheme
-          doneButton.tintColor = .whiteColor()
-        }else{
-          doneButton.backgroundColor = .whiteColor()
+          doneButton.tintColor = .white
+        } else {
+          doneButton.backgroundColor = .white
         }
         
-        doneButton.frame = CGRectMake(alertViewFrame.size.width/2,
-                                      alertViewFrame.size.height - 45,
-                                      alertViewFrame.size.width/2,
-                                      45)
-        doneButton.setTitle(doneTitle, forState: .Normal)
-        doneButton.addTarget(self, action: #selector(donePressed(_:)), forControlEvents: .TouchUpInside)
-        doneButton.titleLabel?.font = UIFont.systemFontOfSize(16, weight: UIFontWeightMedium)
+        doneButton.frame = CGRect(x: alertViewFrame.size.width/2,
+                                     y:  alertViewFrame.size.height - 45,
+                                     width:  alertViewFrame.size.width/2,
+                                     height:  45)
+        doneButton.setTitle(doneTitle, for: .normal)
+        doneButton.addTarget(self, action: #selector(donePressed(sender:)), for: .touchUpInside)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         
-        let horizontalSeparator = UIView(frame: CGRectMake(alertViewFrame.size.width/2 - 1,
-          otherButton.frame.origin.y - 2,
-          2,
-          45))
+        let horizontalSeparator = UIView(frame: CGRect(x: alertViewFrame.size.width/2 - 1,
+                                                       y: otherButton.frame.origin.y - 2,
+                                                       width:  2,
+                                                       height:  45))
         horizontalSeparator.backgroundColor = UIColor(white: 100/255, alpha: 1)
         
-        let blurEffect = UIBlurEffect(style: .ExtraLight)
+        let blurEffect = UIBlurEffect(style: .extraLight)
         
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.frame = horizontalSeparator.bounds
-        visualEffectView.userInteractionEnabled = false
+        visualEffectView.isUserInteractionEnabled = false
         horizontalSeparator.addSubview(visualEffectView)
         
         alertView!.addSubview(doneButton)
         alertView!.addSubview(horizontalSeparator)
-      }else{
-        otherButton.frame = CGRectMake(0,
-                                       alertViewFrame.size.height - 45,
-                                       alertViewFrame.size.width,
-                                       45)
+      } else {
+        otherButton.frame = CGRect(x: 0,
+                                   y: alertViewFrame.size.height - 45,
+                                   width: alertViewFrame.size.width,
+                                   height: 45)
       }
       
       alertView!.addSubview(otherButton)
       
-    }else if(!hideAllButtons && numberOfButtons >= 2){
-      let firstButton = UIButton(type: .System)
-      firstButton.backgroundColor = .whiteColor()
+    } else if (!hideAllButtons && numberOfButtons >= 2){
+        let firstButton = UIButton(type: .system)
+      firstButton.backgroundColor = .white
       
       if hideDoneButton {
-        firstButton.frame = CGRectMake(0,
-                                       alertViewFrame.size.height - 45,
-                                       alertViewFrame.size.width/2,
-                                       45)
-      }else {
-        firstButton.frame = CGRectMake(0,
-                                       alertViewFrame.size.height - 135,
-                                       alertViewFrame.size.width,
-                                       45)
+        firstButton.frame = CGRect(x: 0,
+                                   y: alertViewFrame.size.height - 45,
+                                   width: alertViewFrame.size.width/2,
+                                   height: 45)
+      } else {
+        firstButton.frame = CGRect(x: 0,
+                                   y: alertViewFrame.size.height - 135,
+                                   width: alertViewFrame.size.width,
+                                   height: 45)
       }
       
-      firstButton.setTitle(buttonTitles![0], forState: .Normal)
-      firstButton.addTarget(self, action: #selector(handleButton(_:)), forControlEvents: .TouchUpInside)
-      firstButton.titleLabel?.font = UIFont.systemFontOfSize(16, weight: UIFontWeightRegular)
+      firstButton.setTitle(buttonTitles![0], for: .normal)
+      firstButton.addTarget(self, action: #selector(handleButton(sender:)), for: .touchUpInside)
+      firstButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
       firstButton.tintColor = colorScheme
       firstButton.titleLabel?.adjustsFontSizeToFitWidth = true
       firstButton.titleLabel?.minimumScaleFactor = 0.8
       firstButton.tag = 0
       
-      let secondButton = UIButton(type: .System)
-      secondButton.backgroundColor = .whiteColor()
-      secondButton.setTitle(buttonTitles![1], forState: .Normal)
-      secondButton.addTarget(self, action: #selector(handleButton(_:)), forControlEvents: .TouchUpInside)
-      secondButton.titleLabel?.font = UIFont.systemFontOfSize(16, weight: UIFontWeightRegular)
+      let secondButton = UIButton(type: .system)
+      secondButton.backgroundColor = .white
+      secondButton.setTitle(buttonTitles![1], for: .normal)
+      secondButton.addTarget(self, action: #selector(handleButton(sender:)), for: .touchUpInside)
+      secondButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
       secondButton.tintColor = colorScheme
       secondButton.titleLabel?.adjustsFontSizeToFitWidth = true
       secondButton.titleLabel?.minimumScaleFactor = 0.8
       secondButton.tag = 0
       
-      let firstSeparator = UIView(frame: CGRectMake(0,
-        firstButton.frame.origin.y - 2,
-        alertViewFrame.size.width,
-        2))
+      let firstSeparator = UIView(frame: CGRect(x: 0,
+                                                y: firstButton.frame.origin.y - 2,
+                                                width: alertViewFrame.size.width,
+                                                height: 2))
       firstSeparator.backgroundColor = UIColor(white: 100/255, alpha: 1)
       
-      let secondSeparator = UIView(frame: CGRectMake(0, 0, 0, 0))
+      let secondSeparator = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
       secondSeparator.backgroundColor = UIColor(white: 100/255, alpha: 1)
       
-      let blurEffect = UIBlurEffect(style: .ExtraLight)
+        let blurEffect = UIBlurEffect(style: .extraLight)
       
       let visualEffectView = UIVisualEffectView(effect: blurEffect)
       visualEffectView.frame = firstSeparator.bounds
-      visualEffectView.userInteractionEnabled = false
+      visualEffectView.isUserInteractionEnabled = false
       firstSeparator.addSubview(visualEffectView)
       
       let visualEffectView2 = UIVisualEffectView(effect: blurEffect)
-      visualEffectView2.userInteractionEnabled = false
+      visualEffectView2.isUserInteractionEnabled = false
       secondSeparator.addSubview(visualEffectView2)
       
       if !hideDoneButton {
-        secondButton.frame = CGRectMake(0,
-                                        alertViewFrame.size.height - 90,
-                                        alertViewFrame.size.width,
-                                        45)
-        secondSeparator.frame = CGRectMake(0,
-                                        secondButton.frame.origin.y - 2,
-                                        alertViewFrame.size.width,
-                                        2)
-        let doneButton = UIButton(type: .System)
+        secondButton.frame = CGRect(x: 0,
+                                    y: alertViewFrame.size.height - 90,
+                                    width: alertViewFrame.size.width,
+                                    height: 45)
+        secondSeparator.frame = CGRect(x: 0,
+                                       y: secondButton.frame.origin.y - 2,
+                                       width: alertViewFrame.size.width,
+                                       height: 2)
+        let doneButton = UIButton(type: .system)
         
         if let colorScheme = colorScheme {
           doneButton.backgroundColor = colorScheme
-          doneButton.tintColor = .whiteColor()
-        }else{
-          doneButton.backgroundColor = .whiteColor()
+          doneButton.tintColor = .white
+        } else {
+          doneButton.backgroundColor = .white
         }
         
-        doneButton.frame = CGRectMake(0,
-                                      alertViewFrame.size.height - 45,
-                                      alertViewFrame.size.width,
-                                      45)
-        doneButton.setTitle(doneTitle, forState: .Normal)
-        doneButton.addTarget(self, action: #selector(donePressed(_:)), forControlEvents: .TouchUpInside)
-        doneButton.titleLabel?.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+        doneButton.frame = CGRect(x: 0,
+                                  y: alertViewFrame.size.height - 45,
+                                  width: alertViewFrame.size.width,
+                                  height: 45)
+        doneButton.setTitle(doneTitle, for: .normal)
+        doneButton.addTarget(self, action: #selector(donePressed(sender:)), for: .touchUpInside)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
         
         alertView!.addSubview(doneButton)
       }else {
         // Set proper frames for no donebutton
-        secondButton.frame = CGRectMake(alertViewFrame.size.width/2,
-                                        alertViewFrame.size.height - 45,
-                                        alertViewFrame.size.width/2,
-                                        45)
+        secondButton.frame = CGRect(x: alertViewFrame.size.width/2,
+                                    y: alertViewFrame.size.height - 45,
+                                    width: alertViewFrame.size.width/2,
+                                    height: 45)
         
-        secondSeparator.frame = CGRectMake(alertViewFrame.size.width/2 - 1,
-                                           secondButton.frame.origin.y,
-                                           2,
-                                           45)
+        secondSeparator.frame = CGRect(x: alertViewFrame.size.width/2 - 1,
+                                       y: secondButton.frame.origin.y,
+                                       width: 2,
+                                       height: 45)
       }
       
       visualEffectView2.frame = secondSeparator.bounds
@@ -493,16 +491,16 @@ public class FCAlertView: UIView {
     }
 
     
-    circleLayer.path = UIBezierPath(ovalInRect: CGRectMake(alertViewContents!.frame.size.width/2 - 30.0, -30.0, 60.0, 60.0)).CGPath
+      circleLayer.path = UIBezierPath(ovalIn: CGRect(x: alertViewContents!.frame.size.width/2 - 30.0, y: -30.0, width: 60.0, height: 60.0)).cgPath
     
     
-    let alertViewVector = UIButton(type: .System)
-    alertViewVector.frame = CGRectMake(alertViewContents!.frame.size.width/2 - 15.0,
-                                       -15.0,
-                                       30.0,
-                                       30.0)
-    alertViewVector.setImage(vectorImage, forState: .Normal)
-    alertViewVector.userInteractionEnabled = false
+    let alertViewVector = UIButton(type: .system)
+    alertViewVector.frame = CGRect(x: alertViewContents!.frame.size.width/2 - 15.0,
+                                       y: -15.0,
+                                       width: 30.0,
+                                       height: 30.0)
+    alertViewVector.setImage(vectorImage, for: .normal)
+    alertViewVector.isUserInteractionEnabled = false
     alertViewVector.tintColor = colorScheme
     
     //  VIEW Border - Rounding Corners of AlertView
@@ -515,13 +513,13 @@ public class FCAlertView: UIView {
     }
     
     //  Scaling AlertView - Before Animation
-    alertViewContents!.transform = CGAffineTransformMakeScale(1.15, 1.15)
+        alertViewContents!.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
     
     //  Applying Shadow
-    layer.shadowColor = UIColor.blackColor().CGColor
+    layer.shadowColor = UIColor.black.cgColor
     layer.shadowOpacity = 0.1
     layer.shadowRadius = 10
-    layer.shadowOffset = CGSizeMake(0, 0)
+    layer.shadowOffset = CGSize(width: 0, height: 0)
     
     
     showAlertView()
@@ -530,19 +528,19 @@ public class FCAlertView: UIView {
   
   // Default Types of Alerts
   private func makeAlertTypeWarning() {
-    if let path = NSBundle(forClass: FCAlertView.self).pathForResource("close-round", ofType: "png") {
+    if let path = Bundle(for: FCAlertView.self).path(forResource: "close-round", ofType: "png") {
       setTheme(iconPath: path, tintColor: .flatRed)
     }
   }
   
   private func makeAlertTypeCaution() {
-    if let path = NSBundle(forClass: FCAlertView.self).pathForResource("alert-round", ofType: "png") {
+    if let path = Bundle(for: FCAlertView.self).path(forResource: "alert-round", ofType: "png") {
       setTheme(iconPath: path, tintColor: .flatOrange)
     }
   }
   
   private func makeAlertTypeSuccess(){
-    if let path = NSBundle(forClass: FCAlertView.self).pathForResource("checkmark-round", ofType: "png") {
+    if let path = Bundle(for: FCAlertView.self).path(forResource: "checkmark-round", ofType: "png") {
       setTheme(iconPath: path, tintColor: .flatGreen)
     }
   }
@@ -585,28 +583,28 @@ public class FCAlertView: UIView {
   func showAlertView() {
     
     if let delegate = self.delegate {
-      delegate.FCAlertViewWillAppear(self)
+        delegate.FCAlertViewWillAppear(alertView: self)
     }
     
-    UIView.animateWithDuration(0.3, delay: 0.3, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: {
+    UIView.animate(withDuration: 0.3, delay: 0.3, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.curveEaseInOut], animations: {
       self.alpha = 1
-      self.alertViewContents?.transform = CGAffineTransformMakeScale(1, 1)
+        self.alertViewContents?.transform = CGAffineTransform(scaleX: 1, y: 1)
     }) { (finished) in
       if self.autoHideSeconds != 0 {
-        self.performSelector(#selector(self.dismissAlertView), withObject: nil, afterDelay: Double(self.autoHideSeconds))
+        self.perform(#selector(self.dismissAlertView), with: nil, afterDelay: Double(self.autoHideSeconds))
       }
     }
   }
   
   // Dismissing AlertView
-  public func dismissAlertView() {
-    UIView.animateWithDuration(0.175, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: {
+  @objc public func dismissAlertView() {
+    UIView.animate(withDuration: 0.175, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.curveEaseInOut], animations: {
       self.alpha = 0
-      self.alertViewContents?.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        self.alertViewContents?.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
     }) { (finished) in
       
       if let delegate = self.delegate {
-        delegate.FCAlertViewDismissed(self)
+        delegate.FCAlertViewDismissed(alertView: self)
       }
       
       self.removeFromSuperview()
@@ -618,7 +616,7 @@ public class FCAlertView: UIView {
       return
     }
     
-    delegate.alertView(self, clickedButtonIndex: sender.tag, buttonTitle: sender.titleLabel!.text!)
+    delegate.alertView(alertView: self, clickedButtonIndex: sender.tag, buttonTitle: sender.titleLabel!.text!)
     
     self.dismissAlertView()
   }
@@ -626,7 +624,7 @@ public class FCAlertView: UIView {
   @objc private func donePressed(sender: UIButton){
     
     if let delegate = delegate {
-      delegate.FCAlertDoneButtonClicked(self)
+        delegate.FCAlertDoneButtonClicked(alertView: self)
     }
     
     self.dismissAlertView()
